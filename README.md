@@ -2,4 +2,4 @@
 
 ## Frontend JavaScript
 
-### Project #3: RSS agregator
+### Project #3: RSS aggregator
