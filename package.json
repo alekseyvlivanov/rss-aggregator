@@ -1,0 +1,53 @@
+{
+  "name": "frontend-project-lvl3",
+  "version": "1.0.0",
+  "description": "RSS aggregator",
+  "keywords": [
+    "rss",
+    "aggregator",
+    "hexlet"
+  ],
+  "scripts": {
+    "test": "jest --colors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alekseyvlivanov/frontend-project-lvl3.git"
+  },
+  "author": "Aleksey Ivanov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alekseyvlivanov/frontend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/alekseyvlivanov/frontend-project-lvl3#readme",
+  "jest": {
+    "verbose": true
+  },
+  "dependencies": {
+    "bootstrap": "^4.5.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.3.0",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^4.2.1",
+    "debug": "^4.1.1",
+    "eslint": "^7.7.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.20.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "html-webpack-plugin": "^4.3.0",
+    "jest": "^26.4.0",
+    "jest-cli": "^26.4.0",
+    "prettier": "^2.0.5",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
