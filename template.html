@@ -12,16 +12,19 @@
           <div class="row">
             <div class="col-md-10 col-lg-8 mx-auto">
               <h1 class="display-4">RSS Aggregator</h1>
-              <form class="rss-form">
-                <div class="form-row">
-                  <div class="col">
-                    <input
-                      type="text"
-                      class="form-control form-control-lg mb-2 mr-sm-2"
-                      placeholder="Link to RSS feed"
-                    />
-                  </div>
-                  <div class="col-auto">
+              <form class="add-rss">
+                <label class="lead" for="add-link"
+                  >Add Websites You Love!</label
+                >
+                <div class="input-group">
+                  <input
+                    id="add-link"
+                    type="text"
+                    class="form-control form-control-lg"
+                    placeholder="Link to RSS feed"
+                    aria-describedby="link-help"
+                  />
+                  <div class="input-group-append">
                     <button
                       type="submit"
                       class="btn btn-primary btn-lg mb-2 px-sm-5"
@@ -29,13 +32,17 @@
                       Add
                     </button>
                   </div>
+                  <div class="feedback"></div>
                 </div>
+                <small id="link-help" class="form-text text-muted"
+                  >Example: https://news.ycombinator.com/rss</small
+                >
               </form>
             </div>
           </div>
         </div>
       </section>
-      <section class="rss"></section>
+      <section class="feeds"></section>
     </main>
     <footer class="footer border-top py-3">
       <div class="text-center">
