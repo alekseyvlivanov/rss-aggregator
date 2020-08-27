@@ -1,0 +1,7 @@
+/* https://getbootstrap.com/docs/4.5/components/forms/#input-group-validation-workaround */
+
+/* Change values to match the radius of your form control */
+.fix-rounded-right {
+  border-top-right-radius: 0.3rem !important;
+  border-bottom-right-radius: 0.3rem !important;
+}
