@@ -25,7 +25,11 @@
     "verbose": true
   },
   "dependencies": {
-    "bootstrap": "^4.5.2"
+    "axios": "^0.20.0",
+    "bootstrap": "^4.5.2",
+    "i18next": "^19.7.0",
+    "on-change": "^2.1.2",
+    "yup": "^0.29.3"
   },
   "devDependencies": {
     "@babel/core": "^7.11.4",

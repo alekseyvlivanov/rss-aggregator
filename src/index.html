@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend-project-lvl3</title>
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <main class="main flex-grow-1">
+      <section class="jumbotron jumbotron-fluid py-4 mb-3">
+        <div class="container-xl">
+          <div class="row">
+            <div class="col-md-10 col-lg-8 mx-auto">
+              <h1 class="display-4">title</h1>
+              <form class="add-rss">
+                <label class="lead" for="add-link">label</label>
+                <div class="input-group input-group-lg">
+                  <input
+                    id="add-link"
+                    type="text"
+                    class="form-control"
+                    placeholder="placeholder"
+                  />
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary px-sm-5">
+                      button
+                    </button>
+                  </div>
+                </div>
+                <small id="link-help" class="form-text text-muted">help</small>
+                <div class="feedback">feedback</div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="feeds"></section>
+    </main>
+    <footer class="footer border-top py-2 mt-1">
+      <div class="container-xl">
+        <div class="row">
+          <div
+            class="d-flex justify-content-between col-md-10 col-lg-8 mx-auto"
+          >
+            <a
+              class="btn btn-light btn-sm font-weight-bolder px-3 py-2 rounded text-decoration-none text-monospace"
+              href="https://github.com/alekseyvlivanov/frontend-project-lvl3"
+              role="button"
+              rel="noopener noreferrer"
+              target="_blank"
+              >GitHub</a
+            >
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label
+                class="btn btn-light btn-sm font-weight-bolder px-3 py-2 rounded text-monospace"
+              >
+                <input type="radio" name="lang" id="en" />EN
+              </label>
+              <label
+                class="btn btn-light btn-sm font-weight-bolder px-3 py-2 rounded text-monospace"
+              >
+                <input type="radio" name="lang" id="ru" />РУ
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
