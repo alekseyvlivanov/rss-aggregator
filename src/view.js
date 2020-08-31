@@ -7,7 +7,7 @@ const elements = {
   title: document.querySelector('h1'),
   form: document.querySelector('.add-rss'),
   label: document.querySelector('label'),
-  urlInput: document.querySelector('input[type="text"]'),
+  urlInput: document.querySelector('#add-link'),
   submitButton: document.querySelector('button[type="submit"]'),
   help: document.querySelector('#link-help'),
   feedback: document.querySelector('.feedback'),
