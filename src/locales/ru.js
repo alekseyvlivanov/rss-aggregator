@@ -5,5 +5,6 @@ export default {
     placeholder: 'Ссылка на РСС поток',
     button: 'Добавить',
     help: 'Пример: https://news.ycombinator.com/rss',
+    notValidUrl: 'Должен быть валидный URL',
   },
 };

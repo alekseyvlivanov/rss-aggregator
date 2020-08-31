@@ -1,5 +1,5 @@
 // import axios from 'axios';
-// import { object, string } from 'yup';
+import { object, string } from 'yup';
 
 import { elements, initView } from './view';
 
@@ -7,16 +7,11 @@ import { elements, initView } from './view';
 //   console.log(url);
 // };
 
-// const schema = object().shape({
-//   url: string().url(),
-// });
+const schema = object().shape({
+  url: string().url(),
+});
 
-// const validate = (fields) => {
-//   schema
-//     .validate(fields, { abortEarly: false })
-//     .then((data) => console.log(data))
-//     .catch((err) => console.log(err));
-// };
+const validate = (fields) => schema.validate(fields, { abortEarly: false });
 
 const app = () => {
   const state = {
@@ -26,8 +21,7 @@ const app = () => {
       processState: 'filling',
       processError: null,
       url: '',
-      valid: true,
-      errors: [],
+      error: null,
     },
     lang: 'en',
   };
@@ -36,19 +30,25 @@ const app = () => {
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    watched.form.processState = 'sending';
+    // watched.form.processState = 'sending';
   });
 
-  elements.urlInput.addEventListener('input', (e) => {
+  elements.url.addEventListener('input', (e) => {
     watched.form.url = e.target.value.trim();
+    validate(watched.form)
+      .then(() => {
+        watched.form.error = null;
+      })
+      .catch(() => {
+        watched.form.error = 'notValidUrl';
+      });
   });
 
-  elements.en.addEventListener('click', (e) => {
-    watched.lang = e.target.id;
-  });
-
-  elements.ru.addEventListener('click', (e) => {
-    watched.lang = e.target.id;
+  ['en', 'ru'].forEach((button) => {
+    elements[button].addEventListener('click', (e) => {
+      watched.lang = e.target.id;
+      elements.url.focus();
+    });
   });
 };
 

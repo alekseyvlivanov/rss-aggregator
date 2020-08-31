@@ -5,5 +5,6 @@ export default {
     placeholder: 'Link to RSS feed',
     button: 'Add',
     help: 'Example: https://news.ycombinator.com/rss',
+    notValidUrl: 'Must be a valid URL',
   },
 };
