@@ -14,6 +14,9 @@ const schema = object().shape({
 const validate = (fields) => schema.validate(fields, { abortEarly: false });
 
 const app = () => {
+  const savedLang = localStorage.getItem('lang');
+  const lang = ['en', 'ru'].includes(savedLang) ? savedLang : 'en';
+
   const state = {
     articles: [],
     feeds: [],
@@ -23,7 +26,7 @@ const app = () => {
       url: '',
       error: null,
     },
-    lang: 'en',
+    lang,
   };
 
   const watched = initView(state);
@@ -47,6 +50,7 @@ const app = () => {
   ['en', 'ru'].forEach((button) => {
     elements[button].addEventListener('click', (e) => {
       watched.lang = e.target.id;
+      localStorage.setItem('lang', watched.lang);
       elements.url.focus();
     });
   });
