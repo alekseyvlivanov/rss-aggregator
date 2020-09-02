@@ -6,5 +6,6 @@ export default {
     button: 'Добавить',
     help: 'Пример: https://news.ycombinator.com/rss',
     notValidUrl: 'Должен быть валидный URL',
+    duplicateUrl: 'Этот URL уже добавлен',
   },
 };
