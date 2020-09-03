@@ -7,5 +7,6 @@ export default {
     help: 'Пример: https://news.ycombinator.com/rss',
     notValidUrl: 'Должен быть валидный URL',
     duplicateUrl: 'Этот URL уже добавлен',
+    noTitleAndDescription: 'Этот URL не содержит ни заголовок ни описание РСС',
   },
 };

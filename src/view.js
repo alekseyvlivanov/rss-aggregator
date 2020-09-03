@@ -4,9 +4,9 @@ import onChange from 'on-change';
 import resources from './locales';
 
 const elements = {
-  title: document.querySelector('h1'),
+  title: document.querySelector('.title'),
   form: document.querySelector('.add-rss'),
-  label: document.querySelector('label'),
+  label: document.querySelector('.label'),
   url: document.querySelector('#add-link'),
   submitButton: document.querySelector('button[type="submit"]'),
   help: document.querySelector('#link-help'),
@@ -14,6 +14,14 @@ const elements = {
   feeds: document.querySelector('.feeds'),
   en: document.querySelector('#en'),
   ru: document.querySelector('#ru'),
+};
+
+const processStateHandler = (processState) => {
+  if (processState === 'filling') {
+    elements.submitButton.removeAttribute('disabled');
+  } else if (processState === 'sending') {
+    elements.submitButton.setAttribute('disabled', '');
+  }
 };
 
 const renderTranslation = (lang = 'en') => {
@@ -32,7 +40,7 @@ const renderTranslation = (lang = 'en') => {
   }
 };
 
-const renderFormError = (error = null) => {
+const renderError = (error = null) => {
   if (error) {
     elements.url.classList.add('is-invalid');
     elements.submitButton.setAttribute('disabled', '');
@@ -50,13 +58,16 @@ const initView = (state) => {
   const watched = onChange(state, (path, value) => {
     console.log(path, value);
     switch (path) {
-      case 'form.error':
-        renderFormError(value);
+      case 'process':
+        processStateHandler(value);
+        break;
+      case 'error':
+        renderError(value);
         break;
       case 'lang':
         i18next.changeLanguage(value);
         renderTranslation(value);
-        renderFormError(watched.form.error);
+        renderError(watched.error);
         break;
       default:
     }
@@ -69,10 +80,7 @@ const initView = (state) => {
     })
     .then(() => {
       renderTranslation(watched.lang);
-      renderFormError();
     });
-
-  elements.url.focus();
 
   return watched;
 };

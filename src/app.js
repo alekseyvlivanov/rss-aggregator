@@ -3,64 +3,101 @@ import { object, string } from 'yup';
 
 import { elements, initView } from './view';
 
-const parseUrl = (url) => {
-  const proxy = 'https://cors-anywhere.herokuapp.com/';
-  axios
-    .get(`${proxy}${url}`)
-    .then((response) => console.log(response))
-    .catch((err) => console.log(err));
-};
-
+const corsProxy = 'https://cors-anywhere.herokuapp.com/';
 const langs = ['en', 'ru'];
+const parser = new DOMParser();
 
 const schema = object().shape({
   url: string().url(),
 });
 
-const validate = (fields) => schema.validate(fields, { abortEarly: false });
+const validateForm = (fields) => schema.validate(fields, { abortEarly: false });
+
+const parseRSS = (docXML, id, url) => {
+  const titleElement = docXML.querySelector('rss > channel > title');
+  const descriptionElement = docXML.querySelector(
+    'rss > channel > description',
+  );
+
+  if (!titleElement && !descriptionElement) {
+    return { error: 'noTitleAndDescription', feeds: [], articles: [] };
+  }
+
+  const title = titleElement ? titleElement.textContent : url;
+  const description = descriptionElement ? descriptionElement.textContent : url;
+  const feed = { id, url, title, description };
+
+  const itemElements = docXML.querySelectorAll('rss > channel > item');
+  const articles = Array.from(itemElements).map((item) => ({
+    title: item.querySelector('title').textContent,
+    link: item.querySelector('link').textContent,
+  }));
+
+  return { error: null, feed, articles };
+};
 
 const app = () => {
   const savedLang = localStorage.getItem('lang');
   const lang = langs.includes(savedLang) ? savedLang : 'en';
 
   const state = {
-    articles: [],
-    feeds: [],
-    form: {
-      processState: 'filling',
-      processError: null,
-      url: '',
-      error: null,
-    },
     lang,
+    process: 'filling',
+    url: '',
+    error: null,
+    info: '',
+    feeds: [],
+    articles: [],
   };
 
   const watched = initView(state);
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (watched.form.url !== '') {
-      parseUrl(watched.form.url);
-
-      watched.feeds.push(watched.form.url);
-      watched.form.url = '';
-      elements.form.reset();
+    if (watched.url !== '') {
+      watched.process = 'sending';
+      watched.error = null;
+      axios
+        .get(`${corsProxy}${watched.url}`)
+        .then((response) => {
+          console.log(response);
+          return parser.parseFromString(response.data, 'text/xml');
+        })
+        .then((docXML) => {
+          console.log(docXML);
+          return parseRSS(docXML, watched.feeds.length, watched.url);
+        })
+        .then(({ error, feed, articles }) => {
+          if (error) {
+            watched.error = error;
+          } else {
+            watched.feeds.push(feed);
+            watched.articles.push(articles);
+            watched.url = '';
+            elements.form.reset();
+          }
+        })
+        .catch((error) => {
+          watched.error = error;
+        })
+        .finally(() => {
+          watched.process = 'filling';
+        });
     }
-    // watched.form.processState = 'sending';
   });
 
   elements.url.addEventListener('input', (e) => {
-    watched.form.url = e.target.value.trim();
-    validate(watched.form)
+    watched.url = e.target.value.trim();
+    validateForm(watched)
       .then(() => {
-        if (watched.feeds.includes(watched.form.url)) {
-          watched.form.error = 'duplicateUrl';
+        if (watched.feeds.find((feed) => feed.url === watched.url)) {
+          watched.error = 'duplicateUrl';
         } else {
-          watched.form.error = null;
+          watched.error = null;
         }
       })
       .catch(() => {
-        watched.form.error = 'notValidUrl';
+        watched.error = 'notValidUrl';
       });
   });
 
@@ -71,6 +108,8 @@ const app = () => {
       elements.url.focus();
     });
   });
+
+  elements.url.focus();
 };
 
 export default app;
