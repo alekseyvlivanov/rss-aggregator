@@ -78,7 +78,7 @@ const renderFeeds = (feeds) => {
     feedLink.target = '_blank';
 
     feedGroup.append(feedLink);
-    elements.feeds.append(feedGroup);
+    elements.feeds.prepend(feedGroup);
   });
 };
 
@@ -95,19 +95,18 @@ const renderArticles = (articles) => {
     articleLink.rel = 'noopener noreferrer';
     articleLink.target = '_blank';
 
-    feedGroup.append(articleLink);
+    feedGroup.insertAdjacentElement('afterend', articleLink);
   });
 };
 
 const initView = (state) => {
   const watched = onChange(state, (path, value, previousValue) => {
-    console.log(path, value);
     switch (path) {
       case 'articles':
-        renderArticles(_.difference(value, previousValue));
+        renderArticles(_.differenceWith(value, previousValue, _.isEqual));
         break;
       case 'feeds':
-        renderFeeds(_.difference(value, previousValue));
+        renderFeeds(_.differenceWith(value, previousValue, _.isEqual));
         break;
       case 'feedback':
         renderFeedback(value);

@@ -1,9 +1,11 @@
 import axios from 'axios';
+import _ from 'lodash';
 import { object, string } from 'yup';
 
 import { elements, initView } from './view';
 
 const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+const delay = 60000;
 const langs = ['en', 'ru'];
 const parser = new DOMParser();
 
@@ -13,11 +15,9 @@ const schema = object().shape({
 
 const validateForm = (fields) => schema.validate(fields, { abortEarly: false });
 
-const parseRSS = (docXML, id, url) => {
-  const titleElement = docXML.querySelector('rss > channel > title');
-  const descriptionElement = docXML.querySelector(
-    'rss > channel > description',
-  );
+const parseRSS = (doc, id, url) => {
+  const titleElement = doc.querySelector('rss > channel > title');
+  const descriptionElement = doc.querySelector('rss > channel > description');
 
   if (!titleElement && !descriptionElement) {
     return { error: 'noTitleAndDescription' };
@@ -27,12 +27,14 @@ const parseRSS = (docXML, id, url) => {
   const description = descriptionElement ? descriptionElement.textContent : url;
   const feed = { id, url, title, description };
 
-  const itemElements = docXML.querySelectorAll('rss > channel > item');
-  const articles = Array.from(itemElements).map((item) => ({
-    feedId: id,
-    title: item.querySelector('title').textContent,
-    link: item.querySelector('link').textContent,
-  }));
+  const itemElements = doc.querySelectorAll('rss > channel > item');
+  const articles = Array.from(itemElements)
+    .map((item) => ({
+      feedId: id,
+      title: item.querySelector('title').textContent,
+      link: item.querySelector('link').textContent,
+    }))
+    .reverse();
 
   return { error: null, feed, articles };
 };
@@ -60,13 +62,13 @@ const app = () => {
       axios
         .get(`${corsProxy}${watched.url}`)
         .then((response) => parser.parseFromString(response.data, 'text/xml'))
-        .then((docXML) => parseRSS(docXML, watched.feeds.length, watched.url))
+        .then((doc) => parseRSS(doc, watched.feeds.length, watched.url))
         .then(({ error, feed, articles }) => {
           if (error) {
             watched.feedback = { text: error, type: 'danger' };
           } else {
             watched.feeds.push(feed);
-            watched.articles = watched.articles.concat(articles);
+            articles.forEach((article) => watched.articles.push(article));
             watched.feedback = { text: 'added', type: 'info' };
             watched.url = '';
             elements.form.reset();
@@ -103,6 +105,37 @@ const app = () => {
       elements.url.focus();
     });
   });
+
+  setTimeout(function request() {
+    Promise.all(
+      watched.feeds.map((feed) => axios.get(`${corsProxy}${feed.url}`)),
+    )
+      .then((responses) =>
+        responses.map((response) =>
+          parser.parseFromString(response.data, 'text/xml'),
+        ),
+      )
+      .then((docs) =>
+        docs.map((doc, id) => parseRSS(doc, id, watched.feeds[id].url)),
+      )
+      .then((updates) =>
+        updates.forEach(({ error, articles }) => {
+          if (!error) {
+            _.differenceWith(
+              articles,
+              watched.articles,
+              _.isEqual,
+            ).forEach((article) => watched.articles.push(article));
+          }
+        }),
+      )
+      .catch((error) => {
+        console.log('error:', error);
+      })
+      .finally(() => {
+        setTimeout(request, delay);
+      });
+  }, delay);
 
   elements.url.focus();
 };
