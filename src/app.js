@@ -56,6 +56,7 @@ const app = () => {
     e.preventDefault();
     if (watched.url !== '') {
       watched.process = 'sending';
+      watched.feedback = { text: 'sending', type: 'info' };
       axios
         .get(`${corsProxy}${watched.url}`)
         .then((response) => parser.parseFromString(response.data, 'text/xml'))
@@ -66,7 +67,7 @@ const app = () => {
           } else {
             watched.feeds.push(feed);
             watched.articles = watched.articles.concat(articles);
-            watched.feedback = { text: 'added', type: 'success' };
+            watched.feedback = { text: 'added', type: 'info' };
             watched.url = '';
             elements.form.reset();
           }

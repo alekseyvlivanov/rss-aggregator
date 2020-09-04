@@ -8,6 +8,7 @@ export default {
     notValidUrl: 'Должен быть валидный URL',
     duplicateUrl: 'Этот URL уже добавлен',
     noTitleAndDescription: 'Этот URL не содержит ни заголовка ни описания РСС',
+    sending: 'Загрузка...',
     added: 'URL успешно добавлен',
   },
 };

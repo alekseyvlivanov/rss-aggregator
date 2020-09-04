@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import _ from 'lodash';
 import onChange from 'on-change';
 
 import resources from './locales';
@@ -48,10 +49,10 @@ const renderFeedback = ({ text, type }) => {
       elements.feedback.classList.add('text-danger');
       elements.feedback.textContent = i18next.t(text);
       break;
-    case 'success':
+    case 'info':
       elements.url.classList.remove('is-invalid');
       elements.submitButton.removeAttribute('disabled');
-      elements.feedback.classList.add('text-success');
+      elements.feedback.classList.add('text-info');
       elements.feedback.textContent = i18next.t(text);
       break;
     default:
@@ -62,13 +63,51 @@ const renderFeedback = ({ text, type }) => {
   }
 };
 
+const renderFeeds = (feeds) => {
+  feeds.forEach((feed) => {
+    const feedGroup = document.createElement('ul');
+    feedGroup.className = 'list-group my-2';
+    feedGroup.dataset.id = feed.id;
+
+    const feedLink = document.createElement('a');
+    feedLink.className =
+      'list-group-item list-group-item-action list-group-item-dark lead font-weight-bolder';
+    feedLink.textContent = feed.title;
+    feedLink.href = feed.url;
+    feedLink.rel = 'noopener noreferrer';
+    feedLink.target = '_blank';
+
+    feedGroup.append(feedLink);
+    elements.feeds.append(feedGroup);
+  });
+};
+
+const renderArticles = (articles) => {
+  articles.forEach((article) => {
+    const feedGroup = elements.feeds.querySelector(
+      `ul[data-id="${article.feedId}"]`,
+    );
+
+    const articleLink = document.createElement('a');
+    articleLink.className = 'list-group-item list-group-item-action';
+    articleLink.textContent = article.title;
+    articleLink.href = article.link;
+    articleLink.rel = 'noopener noreferrer';
+    articleLink.target = '_blank';
+
+    feedGroup.append(articleLink);
+  });
+};
+
 const initView = (state) => {
-  const watched = onChange(state, (path, value) => {
+  const watched = onChange(state, (path, value, previousValue) => {
     console.log(path, value);
     switch (path) {
       case 'articles':
+        renderArticles(_.difference(value, previousValue));
         break;
       case 'feeds':
+        renderFeeds(_.difference(value, previousValue));
         break;
       case 'feedback':
         renderFeedback(value);
