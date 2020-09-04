@@ -20,7 +20,7 @@ const parseRSS = (docXML, id, url) => {
   );
 
   if (!titleElement && !descriptionElement) {
-    return { error: 'noTitleAndDescription', feeds: [], articles: [] };
+    return { error: 'noTitleAndDescription' };
   }
 
   const title = titleElement ? titleElement.textContent : url;
@@ -29,6 +29,7 @@ const parseRSS = (docXML, id, url) => {
 
   const itemElements = docXML.querySelectorAll('rss > channel > item');
   const articles = Array.from(itemElements).map((item) => ({
+    feedId: id,
     title: item.querySelector('title').textContent,
     link: item.querySelector('link').textContent,
   }));
@@ -44,8 +45,7 @@ const app = () => {
     lang,
     process: 'filling',
     url: '',
-    error: null,
-    info: '',
+    feedback: {},
     feeds: [],
     articles: [],
   };
@@ -56,29 +56,23 @@ const app = () => {
     e.preventDefault();
     if (watched.url !== '') {
       watched.process = 'sending';
-      watched.error = null;
       axios
         .get(`${corsProxy}${watched.url}`)
-        .then((response) => {
-          console.log(response);
-          return parser.parseFromString(response.data, 'text/xml');
-        })
-        .then((docXML) => {
-          console.log(docXML);
-          return parseRSS(docXML, watched.feeds.length, watched.url);
-        })
+        .then((response) => parser.parseFromString(response.data, 'text/xml'))
+        .then((docXML) => parseRSS(docXML, watched.feeds.length, watched.url))
         .then(({ error, feed, articles }) => {
           if (error) {
-            watched.error = error;
+            watched.feedback = { text: error, type: 'danger' };
           } else {
             watched.feeds.push(feed);
-            watched.articles.push(articles);
+            watched.articles = watched.articles.concat(articles);
+            watched.feedback = { text: 'added', type: 'success' };
             watched.url = '';
             elements.form.reset();
           }
         })
         .catch((error) => {
-          watched.error = error;
+          watched.feedback = { text: error, type: 'danger' };
         })
         .finally(() => {
           watched.process = 'filling';
@@ -91,13 +85,13 @@ const app = () => {
     validateForm(watched)
       .then(() => {
         if (watched.feeds.find((feed) => feed.url === watched.url)) {
-          watched.error = 'duplicateUrl';
+          watched.feedback = { text: 'duplicateUrl', type: 'danger' };
         } else {
-          watched.error = null;
+          watched.feedback = {};
         }
       })
       .catch(() => {
-        watched.error = 'notValidUrl';
+        watched.feedback = { text: 'notValidUrl', type: 'danger' };
       });
   });
 

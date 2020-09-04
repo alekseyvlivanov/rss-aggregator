@@ -9,5 +9,6 @@ export default {
     duplicateUrl: 'This URL has already been added',
     noTitleAndDescription:
       "This URL doesn't contain neither title nor description for RSS",
+    added: 'URL has been successfully added',
   },
 };
