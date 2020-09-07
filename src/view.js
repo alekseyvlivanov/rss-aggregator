@@ -95,7 +95,7 @@ const renderArticles = (articles) => {
     articleLink.rel = 'noopener noreferrer';
     articleLink.target = '_blank';
 
-    feedGroup.insertAdjacentElement('afterend', articleLink);
+    feedGroup.firstChild.after(articleLink);
   });
 };
 
