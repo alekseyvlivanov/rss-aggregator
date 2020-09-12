@@ -5,11 +5,11 @@ export default {
     placeholder: 'Link to RSS feed',
     button: 'Add',
     help: 'Example: https://news.ycombinator.com/rss',
-    notValidUrl: 'Must be a valid URL',
-    duplicateUrl: 'This URL has already been added',
+    url: 'Must be a valid URL',
+    notOneOf: 'This URL has already been added',
     noTitleAndDescription:
       "This URL doesn't contain neither title nor description for RSS",
-    sending: 'Loading...',
+    loading: 'Loading...',
     added: 'URL has been successfully added',
   },
 };

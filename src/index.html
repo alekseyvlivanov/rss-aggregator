@@ -12,23 +12,28 @@
           <div class="row">
             <div class="col-md-10 col-lg-8 mx-auto">
               <h1 class="title display-4">title</h1>
-              <form class="add-rss">
-                <label class="label lead" for="add-link">label</label>
-                <div class="input-group input-group-lg">
-                  <input
-                    id="add-link"
-                    class="form-control"
-                    placeholder="placeholder"
-                  />
-                  <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary px-sm-5">
-                      button
-                    </button>
+              <form class="add-rss" novalidate>
+                <fieldset class="fieldset">
+                  <label class="label lead" for="add-link">label</label>
+                  <div class="input-group input-group-lg">
+                    <input
+                      id="add-link"
+                      class="form-control"
+                      placeholder="placeholder"
+                    />
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-primary px-sm-5">
+                        button
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <small id="link-help" class="form-text text-muted">help</small>
-                <div class="feedback"></div>
+                  <small id="link-help" class="form-text text-muted"
+                    >help</small
+                  >
+                </fieldset>
+                <div class="form-feedback"></div>
               </form>
+              <div class="app-feedback"></div>
             </div>
           </div>
         </div>

@@ -1,36 +1,17 @@
+/* eslint no-param-reassign: ["error", { "props": false }] */
+
 import i18next from 'i18next';
-import _ from 'lodash';
+import { differenceWith, isEqual } from 'lodash';
 import onChange from 'on-change';
 
 import resources from './locales';
 
-const elements = {
-  title: document.querySelector('.title'),
-  form: document.querySelector('.add-rss'),
-  label: document.querySelector('.label'),
-  url: document.querySelector('#add-link'),
-  submitButton: document.querySelector('button[type="submit"]'),
-  help: document.querySelector('#link-help'),
-  feedback: document.querySelector('.feedback'),
-  feeds: document.querySelector('.feeds'),
-  en: document.querySelector('#en'),
-  ru: document.querySelector('#ru'),
-};
-
-const processStateHandler = (processState) => {
-  if (processState === 'filling') {
-    elements.submitButton.removeAttribute('disabled');
-  } else if (processState === 'sending') {
-    elements.submitButton.setAttribute('disabled', '');
-  }
-};
-
-const renderTranslation = (lang = 'en') => {
+const renderFormTranslation = (elements, lang) => {
   document.title = i18next.t('title');
   elements.title.textContent = i18next.t('title');
   elements.label.textContent = i18next.t('label');
   elements.url.setAttribute('placeholder', i18next.t('placeholder'));
-  elements.submitButton.textContent = i18next.t('button');
+  elements.submitBtn.textContent = i18next.t('button');
   elements.help.textContent = i18next.t('help');
   if (lang === 'en') {
     elements.ru.parentElement.classList.remove('active');
@@ -39,36 +20,56 @@ const renderTranslation = (lang = 'en') => {
     elements.en.parentElement.classList.remove('active');
     elements.ru.parentElement.classList.add('active');
   }
+  elements.url.focus();
 };
 
-const renderFeedback = ({ text, type }) => {
-  switch (type) {
-    case 'danger':
-      elements.url.classList.add('is-invalid');
-      elements.submitButton.setAttribute('disabled', '');
-      elements.feedback.classList.add('text-danger');
-      elements.feedback.textContent = i18next.t(text);
-      break;
-    case 'info':
-      elements.url.classList.remove('is-invalid');
-      elements.submitButton.removeAttribute('disabled');
-      elements.feedback.classList.add('text-info');
-      elements.feedback.textContent = i18next.t(text);
-      break;
-    default:
-      elements.url.classList.remove('is-invalid');
-      elements.submitButton.removeAttribute('disabled');
-      elements.feedback.className = 'feedback';
-      elements.feedback.textContent = '';
+const renderUrlValidation = (elements, { valid }) => {
+  elements.submitBtn.disabled = !valid;
+};
+
+const renderFormErrors = (elements, { error }) => {
+  if (error) {
+    elements.url.classList.add('is-invalid');
+    elements.formFeedback.classList.add('text-danger');
+    elements.formFeedback.textContent = i18next.t(error);
+  } else {
+    elements.url.classList.remove('is-invalid');
+    elements.formFeedback.classList.remove('text-danger');
+    elements.formFeedback.textContent = '';
   }
 };
 
-const renderFeeds = (feeds) => {
+const renderAppInformation = (elements, info) => {
+  if (info) {
+    elements.appFeedback.classList.add('text-info');
+    elements.appFeedback.textContent = i18next.t(info);
+  } else {
+    elements.appFeedback.classList.remove('text-info');
+    elements.appFeedback.textContent = '';
+  }
+};
+
+const renderFormStatus = (elements, { status }) => {
+  switch (status) {
+    case 'added':
+      elements.form.reset();
+      break;
+    case 'filling':
+      elements.fieldset.disabled = false;
+      elements.url.focus();
+      break;
+    case 'loading':
+      elements.fieldset.disabled = true;
+      break;
+    default:
+  }
+};
+
+const renderFeeds = (elements, feeds) => {
   feeds.forEach((feed) => {
     const feedGroup = document.createElement('ul');
     feedGroup.className = 'list-group my-2';
     feedGroup.dataset.id = feed.id;
-
     const feedLink = document.createElement('a');
     feedLink.className =
       'list-group-item list-group-item-action list-group-item-dark lead font-weight-bolder';
@@ -76,48 +77,53 @@ const renderFeeds = (feeds) => {
     feedLink.href = feed.url;
     feedLink.rel = 'noopener noreferrer';
     feedLink.target = '_blank';
-
     feedGroup.append(feedLink);
     elements.feeds.prepend(feedGroup);
   });
 };
 
-const renderArticles = (articles) => {
-  articles.forEach((article) => {
+const renderPosts = (elements, posts) => {
+  posts.forEach((post) => {
     const feedGroup = elements.feeds.querySelector(
-      `ul[data-id="${article.feedId}"]`,
+      `ul[data-id="${post.feedId}"]`,
     );
-
-    const articleLink = document.createElement('a');
-    articleLink.className = 'list-group-item list-group-item-action';
-    articleLink.textContent = article.title;
-    articleLink.href = article.link;
-    articleLink.rel = 'noopener noreferrer';
-    articleLink.target = '_blank';
-
-    feedGroup.firstChild.after(articleLink);
+    const postLink = document.createElement('a');
+    postLink.className = 'list-group-item list-group-item-action';
+    postLink.textContent = post.title;
+    postLink.href = post.link;
+    postLink.rel = 'noopener noreferrer';
+    postLink.target = '_blank';
+    feedGroup.firstChild.after(postLink);
   });
 };
 
-const initView = (state) => {
-  const watched = onChange(state, (path, value, previousValue) => {
+const initView = (state, elements) => {
+  const watchedState = onChange(state, (path, value, previousValue) => {
     switch (path) {
-      case 'articles':
-        renderArticles(_.differenceWith(value, previousValue, _.isEqual));
+      case 'data.feeds':
+        renderFeeds(elements, differenceWith(value, previousValue, isEqual));
         break;
-      case 'feeds':
-        renderFeeds(_.differenceWith(value, previousValue, _.isEqual));
+      case 'data.posts':
+        renderPosts(elements, differenceWith(value, previousValue, isEqual));
         break;
-      case 'feedback':
-        renderFeedback(value);
+      case 'form.error':
+        renderFormErrors(elements, state.form);
         break;
-      case 'process':
-        processStateHandler(value);
+      case 'form.status':
+        renderFormStatus(elements, state.form);
+        break;
+      case 'form.valid':
+        renderUrlValidation(elements, state.form);
+        break;
+      case 'info':
+        renderAppInformation(elements, state.info);
         break;
       case 'lang':
-        i18next.changeLanguage(value);
-        renderTranslation(value);
-        renderFeedback(watched.feedback);
+        i18next.changeLanguage(state.lang);
+        renderFormTranslation(elements, state.lang);
+        renderUrlValidation(elements, state.form);
+        renderFormErrors(elements, state.form);
+        renderAppInformation(elements, state.info);
         break;
       default:
     }
@@ -125,14 +131,17 @@ const initView = (state) => {
 
   i18next
     .init({
-      lng: watched.lang,
+      lng: state.lang,
       resources,
     })
     .then(() => {
-      renderTranslation(watched.lang);
+      renderFormTranslation(elements, state.lang);
+      renderUrlValidation(elements, state.form);
+      renderFormErrors(elements, state.form);
+      renderAppInformation(elements, state.info);
     });
 
-  return watched;
+  return watchedState;
 };
 
-export { elements, initView };
+export default initView;
