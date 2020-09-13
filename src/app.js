@@ -23,23 +23,23 @@ const addFeed = (data, url) => {
   });
 };
 
-const updateFeeds = (data, timeoutID, delayForUpdate) => {
-  Promise.all(data.urls.map((url) => getFeed(url)))
+const updateFeeds = (watchedState, delayForUpdate) => {
+  Promise.all(watchedState.data.urls.map((url) => getFeed(url)))
     .then((feedsAndPosts) =>
       feedsAndPosts.forEach(({ posts }, feedId) => {
         differenceWith(
           posts.map((post) => ({ feedId, ...post })),
-          data.posts,
+          watchedState.data.posts,
           isEqual,
-        ).forEach((post) => data.posts.push(post));
+        ).forEach((post) => watchedState.data.posts.push(post));
       }),
     )
     .catch((err) => {
       console.warn(err);
     })
     .finally(() => {
-      setTimeout(() => {
-        updateFeeds(data, timeoutID, delayForUpdate);
+      watchedState.timeoutID = setTimeout(() => {
+        updateFeeds(watchedState, delayForUpdate);
       }, delayForUpdate);
     });
 };
@@ -111,11 +111,7 @@ const app = () => {
         watchedState.info = 'added';
         if (!watchedState.timeoutID) {
           watchedState.timeoutID = setTimeout(() => {
-            updateFeeds(
-              watchedState.data,
-              watchedState.timeoutID,
-              delayForUpdate,
-            );
+            updateFeeds(watchedState, delayForUpdate);
           }, delayForUpdate);
         }
       })
