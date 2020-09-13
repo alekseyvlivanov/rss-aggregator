@@ -17,7 +17,7 @@ const getFeed = (url) => {
 const addFeed = (data, url) => {
   return getFeed(url).then(({ feed, posts }) => {
     const id = data.feeds.length;
-    data.feeds.push({ id, ...feed });
+    data.feeds.push({ id, url, ...feed });
     posts.reverse().forEach((post) => data.posts.push({ feedId: id, ...post }));
     data.urls.push(url);
   });
