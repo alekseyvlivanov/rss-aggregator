@@ -34,7 +34,9 @@ const updateFeeds = (watchedState, delayForUpdate) => {
           posts.map((post) => ({ feedId, ...post })),
           watchedState.posts,
           isEqual,
-        ).forEach((post) => watchedState.posts.push(post));
+        )
+          .reverse()
+          .forEach((post) => watchedState.posts.push(post));
       }),
     )
     .finally(() => {
