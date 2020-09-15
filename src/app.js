@@ -35,9 +35,6 @@ const updateFeeds = (watchedState, delayForUpdate) => {
         ).forEach((post) => watchedState.posts.push(post));
       }),
     )
-    .catch((err) => {
-      console.warn(err);
-    })
     .finally(() => {
       watchedState.timeoutID = setTimeout(() => {
         updateFeeds(watchedState, delayForUpdate);
@@ -115,6 +112,7 @@ const app = () => {
         }
       })
       .catch((err) => {
+        console.warn(err.message);
         watchedState.info = err.message;
       })
       .finally(() => {
