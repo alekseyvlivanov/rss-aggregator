@@ -1,12 +1,9 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
-import i18next from 'i18next';
 import { differenceWith, isEqual } from 'lodash';
 import onChange from 'on-change';
 
-import resources from './locales';
-
-const renderFormTranslation = (elements, lang) => {
+const renderFormTranslation = (elements, i18next, lang) => {
   document.title = i18next.t('title');
   elements.title.textContent = i18next.t('title');
   elements.label.textContent = i18next.t('label');
@@ -27,7 +24,7 @@ const renderUrlValidation = (elements, { valid }) => {
   elements.submitBtn.disabled = !valid;
 };
 
-const renderFormErrors = (elements, { error }) => {
+const renderFormErrors = (elements, i18next, { error }) => {
   if (error) {
     elements.url.classList.add('is-invalid');
     elements.formFeedback.classList.add('text-danger');
@@ -39,7 +36,7 @@ const renderFormErrors = (elements, { error }) => {
   }
 };
 
-const renderAppInformation = (elements, info) => {
+const renderAppInformation = (elements, i18next, info) => {
   if (info) {
     elements.appFeedback.classList.add('text-info');
     elements.appFeedback.textContent = i18next.t(info);
@@ -98,12 +95,11 @@ const renderPosts = (elements, posts) => {
   });
 };
 
-const initView = (state, elements) => {
+const initView = (state, elements, i18next) => {
   const watchedState = onChange(state, (path, value, previousValue) => {
-    console.log(path, value, previousValue);
     switch (path) {
       case 'form.error':
-        renderFormErrors(elements, state.form);
+        renderFormErrors(elements, i18next, state.form);
         break;
       case 'form.status':
         renderFormStatus(elements, state.form);
@@ -114,7 +110,7 @@ const initView = (state, elements) => {
         renderUrlValidation(elements, state.form);
         break;
       case 'info':
-        renderAppInformation(elements, state.info);
+        renderAppInformation(elements, i18next, state.info);
         break;
       case 'feeds':
         renderFeeds(elements, differenceWith(value, previousValue, isEqual));
@@ -124,10 +120,10 @@ const initView = (state, elements) => {
         break;
       case 'lang':
         i18next.changeLanguage(state.lang);
-        renderFormTranslation(elements, state.lang);
+        renderFormTranslation(elements, i18next, state.lang);
         renderUrlValidation(elements, state.form);
-        renderFormErrors(elements, state.form);
-        renderAppInformation(elements, state.info);
+        renderFormErrors(elements, i18next, state.form);
+        renderAppInformation(elements, i18next, state.info);
         break;
       case 'timeoutID':
         break;
@@ -135,18 +131,6 @@ const initView = (state, elements) => {
         throw new Error(`Unknown state property: '${path}'!`);
     }
   });
-
-  i18next
-    .init({
-      lng: state.lang,
-      resources,
-    })
-    .then(() => {
-      renderFormTranslation(elements, state.lang);
-      renderUrlValidation(elements, state.form);
-      renderFormErrors(elements, state.form);
-      renderAppInformation(elements, state.info);
-    });
 
   return watchedState;
 };
