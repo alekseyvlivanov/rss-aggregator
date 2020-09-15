@@ -14,23 +14,25 @@ const getFeed = (url) => {
   return axios.get(corsProxyUrl).then((response) => parseRSS(response.data));
 };
 
-const addFeed = (data, url) => {
-  return getFeed(url).then(({ feed, posts }) => {
-    const id = data.feeds.length;
-    data.feeds.push({ id, url, ...feed });
-    posts.reverse().forEach((post) => data.posts.push({ feedId: id, ...post }));
+const addFeed = (watchedState) => {
+  return getFeed(watchedState.form.url).then(({ feed, posts }) => {
+    const id = watchedState.feeds.length;
+    watchedState.feeds.push({ id, url: watchedState.form.url, ...feed });
+    posts
+      .reverse()
+      .forEach((post) => watchedState.posts.push({ feedId: id, ...post }));
   });
 };
 
 const updateFeeds = (watchedState, delayForUpdate) => {
-  Promise.all(watchedState.data.feeds.map(({ url }) => getFeed(url)))
+  Promise.all(watchedState.feeds.map(({ url }) => getFeed(url)))
     .then((feedsAndPosts) =>
       feedsAndPosts.forEach(({ posts }, feedId) => {
         differenceWith(
           posts.map((post) => ({ feedId, ...post })),
-          watchedState.data.posts,
+          watchedState.posts,
           isEqual,
-        ).forEach((post) => watchedState.data.posts.push(post));
+        ).forEach((post) => watchedState.posts.push(post));
       }),
     )
     .catch((err) => {
@@ -51,10 +53,6 @@ const app = () => {
   const lang = langs.includes(savedLang) ? savedLang : 'en';
 
   const state = {
-    data: {
-      feeds: [],
-      posts: [],
-    },
     form: {
       error: null,
       status: 'filling',
@@ -62,6 +60,8 @@ const app = () => {
       valid: false,
     },
     info: null,
+    feeds: [],
+    posts: [],
     lang,
     timeoutID: null,
   };
@@ -85,7 +85,7 @@ const app = () => {
 
   elements.url.addEventListener('input', (e) => {
     watchedState.form.url = e.target.value.trim();
-    const urls = watchedState.data.feeds.map(({ url }) => url);
+    const urls = watchedState.feeds.map(({ url }) => url);
     validate(watchedState.form.url, urls)
       .then(() => {
         watchedState.form.valid = watchedState.form.url !== '';
@@ -104,7 +104,7 @@ const app = () => {
     e.preventDefault();
     watchedState.form.status = 'loading';
     watchedState.info = 'loading';
-    addFeed(watchedState.data, watchedState.form.url)
+    addFeed(watchedState)
       .then(() => {
         watchedState.form.status = 'added';
         watchedState.info = 'added';

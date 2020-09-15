@@ -100,13 +100,8 @@ const renderPosts = (elements, posts) => {
 
 const initView = (state, elements) => {
   const watchedState = onChange(state, (path, value, previousValue) => {
+    console.log(path, value, previousValue);
     switch (path) {
-      case 'data.feeds':
-        renderFeeds(elements, differenceWith(value, previousValue, isEqual));
-        break;
-      case 'data.posts':
-        renderPosts(elements, differenceWith(value, previousValue, isEqual));
-        break;
       case 'form.error':
         renderFormErrors(elements, state.form);
         break;
@@ -120,6 +115,12 @@ const initView = (state, elements) => {
         break;
       case 'info':
         renderAppInformation(elements, state.info);
+        break;
+      case 'feeds':
+        renderFeeds(elements, differenceWith(value, previousValue, isEqual));
+        break;
+      case 'posts':
+        renderPosts(elements, differenceWith(value, previousValue, isEqual));
         break;
       case 'lang':
         i18next.changeLanguage(state.lang);
