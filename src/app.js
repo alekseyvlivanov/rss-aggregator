@@ -19,12 +19,11 @@ const addFeed = (data, url) => {
     const id = data.feeds.length;
     data.feeds.push({ id, url, ...feed });
     posts.reverse().forEach((post) => data.posts.push({ feedId: id, ...post }));
-    data.urls.push(url);
   });
 };
 
 const updateFeeds = (watchedState, delayForUpdate) => {
-  Promise.all(watchedState.data.urls.map((url) => getFeed(url)))
+  Promise.all(watchedState.data.feeds.map(({ url }) => getFeed(url)))
     .then((feedsAndPosts) =>
       feedsAndPosts.forEach(({ posts }, feedId) => {
         differenceWith(
@@ -55,7 +54,6 @@ const app = () => {
     data: {
       feeds: [],
       posts: [],
-      urls: [],
     },
     form: {
       error: null,
@@ -87,7 +85,8 @@ const app = () => {
 
   elements.url.addEventListener('input', (e) => {
     watchedState.form.url = e.target.value.trim();
-    validate(watchedState.form.url, watchedState.data.urls)
+    const urls = watchedState.data.feeds.map(({ url }) => url);
+    validate(watchedState.form.url, urls)
       .then(() => {
         watchedState.form.valid = watchedState.form.url !== '';
         watchedState.form.error = null;
