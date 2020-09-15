@@ -62,6 +62,7 @@ const renderFormStatus = (elements, { status }) => {
       elements.fieldset.disabled = true;
       break;
     default:
+      throw new Error(`Unknown form status: '${status}'!`);
   }
 };
 
@@ -112,6 +113,8 @@ const initView = (state, elements) => {
       case 'form.status':
         renderFormStatus(elements, state.form);
         break;
+      case 'form.url':
+        break;
       case 'form.valid':
         renderUrlValidation(elements, state.form);
         break;
@@ -125,7 +128,10 @@ const initView = (state, elements) => {
         renderFormErrors(elements, state.form);
         renderAppInformation(elements, state.info);
         break;
+      case 'timeoutID':
+        break;
       default:
+        throw new Error(`Unknown state property: '${path}'!`);
     }
   });
 
