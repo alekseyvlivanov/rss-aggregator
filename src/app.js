@@ -137,7 +137,7 @@ const app = () => {
       const savedLang = localStorage.getItem('lang');
       const lang = langs.includes(savedLang) ? savedLang : 'en';
 
-      const watchedState = initView(state, elements, i18next);
+      const watchedState = initView(state, elements);
       watchedState.lang = lang;
 
       addHandlers(watchedState, elements, delayForUpdate, langs);

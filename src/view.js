@@ -1,9 +1,10 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
+import i18next from 'i18next';
 import { differenceWith, isEqual } from 'lodash';
 import onChange from 'on-change';
 
-const renderFormTranslation = (elements, i18next, lang) => {
+const renderFormTranslation = (elements, lang) => {
   document.title = i18next.t('title');
   elements.title.textContent = i18next.t('title');
   elements.label.textContent = i18next.t('label');
@@ -24,7 +25,7 @@ const renderUrlValidation = (elements, { valid }) => {
   elements.submitBtn.disabled = !valid;
 };
 
-const renderFormErrors = (elements, i18next, { error }) => {
+const renderFormErrors = (elements, { error }) => {
   if (error) {
     elements.url.classList.add('is-invalid');
     elements.formFeedback.classList.add('text-danger');
@@ -36,7 +37,7 @@ const renderFormErrors = (elements, i18next, { error }) => {
   }
 };
 
-const renderAppInformation = (elements, i18next, info) => {
+const renderAppInformation = (elements, info) => {
   if (info) {
     elements.appFeedback.classList.add('text-info');
     elements.appFeedback.textContent = i18next.t(info);
@@ -95,11 +96,11 @@ const renderPosts = (elements, posts) => {
   });
 };
 
-const initView = (state, elements, i18next) => {
+const initView = (state, elements) => {
   const watchedState = onChange(state, (path, value, previousValue) => {
     switch (path) {
       case 'form.error':
-        renderFormErrors(elements, i18next, state.form);
+        renderFormErrors(elements, state.form);
         break;
       case 'form.status':
         renderFormStatus(elements, state.form);
@@ -110,7 +111,7 @@ const initView = (state, elements, i18next) => {
         renderUrlValidation(elements, state.form);
         break;
       case 'info':
-        renderAppInformation(elements, i18next, state.info);
+        renderAppInformation(elements, state.info);
         break;
       case 'feeds':
         renderFeeds(elements, differenceWith(value, previousValue, isEqual));
@@ -120,10 +121,10 @@ const initView = (state, elements, i18next) => {
         break;
       case 'lang':
         i18next.changeLanguage(state.lang);
-        renderFormTranslation(elements, i18next, state.lang);
+        renderFormTranslation(elements, state.lang);
         renderUrlValidation(elements, state.form);
-        renderFormErrors(elements, i18next, state.form);
-        renderAppInformation(elements, i18next, state.info);
+        renderFormErrors(elements, state.form);
+        renderAppInformation(elements, state.info);
         break;
       case 'timeoutID':
         break;
