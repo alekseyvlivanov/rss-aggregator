@@ -1,5 +1,5 @@
 {
-  "name": "frontend-project-lvl3",
+  "name": "rss-aggregator",
   "version": "1.0.0",
   "description": "RSS Aggregator",
   "keywords": [
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alekseyvlivanov/frontend-project-lvl3.git"
+    "url": "git+https://github.com/alekseyvlivanov/rss-aggregator.git"
   },
   "author": "Aleksey Ivanov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alekseyvlivanov/frontend-project-lvl3/issues"
+    "url": "https://github.com/alekseyvlivanov/rss-aggregator/issues"
   },
-  "homepage": "https://github.com/alekseyvlivanov/frontend-project-lvl3#readme",
+  "homepage": "https://github.com/alekseyvlivanov/rss-aggregator#readme",
   "jest": {
     "verbose": true
   },
