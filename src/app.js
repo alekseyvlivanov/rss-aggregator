@@ -10,10 +10,12 @@ import validate from './validator';
 import initView from './view';
 
 const getFeed = (url) => {
-  const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-  const corsProxyUrl = `${corsProxy}${url}`;
+  const corsProxy = 'https://api.allorigins.win/get?url=';
+  const corsProxyUrl = `${corsProxy}${encodeURIComponent(url)}`;
 
-  return axios.get(corsProxyUrl).then((response) => parseRSS(response.data));
+  return axios
+    .get(corsProxyUrl)
+    .then((response) => parseRSS(response.data.contents));
 };
 
 const addFeed = (watchedState) => {
