@@ -1,14 +1,56 @@
-# Hexlet
+# RSS Aggregator
 
-## Frontend JavaScript
+## Overview
 
-### Project #3: RSS Aggregator
+This is a simple RSS reader.
+
+#### DEMO - https://rss-aggregator.chessiah.com
 
 [![Node CI](https://github.com/alekseyvlivanov/rss-aggregator/workflows/Node%20CI/badge.svg)](https://github.com/alekseyvlivanov/rss-aggregator/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b0ba463df67dfab87af8/maintainability)](https://codeclimate.com/github/alekseyvlivanov/rss-aggregator/maintainability)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c376cd8b-0c2a-4d1a-9eed-aeeb3d9f1b25/deploy-status)](https://app.netlify.com/sites/rss-aggregator-chessiah/deploys)
 
-You can see this project in action:
+<div align="center">
+<img src="rss-aggregator.png" width="400px">
+</div>
 
-- Netlify - <https://rss-aggregator.chessiah.com>
-- Vercel - <https://rss-aggregator.alekseyvlivanov.vercel.app>
+## Features
+
+- DOM manipulation
+- form validation
+- internationalization (EN/RU)
+- MVC
+- [All Origins](https://github.com/gnuns/allorigins) is used as a CORS proxy
+- using [Makefile](https://makefile.site) for better command management
+
+## Dependencies
+
+- vanilla js
+- [axios](https://github.com/axios/axios) for AJAX
+- styling with [Bootstrap](https://getbootstrap.com) (css only)
+- interface localization with [i18next](https://www.i18next.com)
+- [Lodash](https://github.com/lodash/lodash) is used to compare nested objects
+- [on-change](https://github.com/sindresorhus/on-change) wathes for state and initiates renderings
+- validating form data with [Yup](https://github.com/jquense/yup)
+
+## Install
+
+```
+$ git clone ...
+$ cd rss-aggregator
+$ make  install
+```
+
+## Usage
+
+```
+$ make develop
+```
+
+and open http://localhost:8080 in your browser, or
+
+```
+$ make build
+```
+
+and deploy somewhere your new **dist** folder.
