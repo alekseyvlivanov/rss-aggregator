@@ -2,13 +2,13 @@
 
 ## Overview
 
-This is a simple RSS reader.
+This is an RSS reader.
 
-#### DEMO - https://rss-aggregator.chessiah.com
+#### DEMO - https://rss-aggregator.aleksey-vl-ivanov.com
 
 [![Node CI](https://github.com/alekseyvlivanov/rss-aggregator/workflows/Node%20CI/badge.svg)](https://github.com/alekseyvlivanov/rss-aggregator/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b0ba463df67dfab87af8/maintainability)](https://codeclimate.com/github/alekseyvlivanov/rss-aggregator/maintainability)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/c376cd8b-0c2a-4d1a-9eed-aeeb3d9f1b25/deploy-status)](https://app.netlify.com/sites/rss-aggregator-chessiah/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/80053436-aca1-4a86-94dd-0b0d4373684b/deploy-status)](https://app.netlify.com/sites/rss-aggregator-aleksey-vl-ivanov/deploys)
 
 <div align="center">
 <img src="rss-aggregator.png" width="400px">

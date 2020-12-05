@@ -1,0 +1,21 @@
+[build]
+  command = "make build"
+  publish = "dist"
+
+[[redirects]]
+  from = "https://rss-aggregator-aleksey-vl-ivanov.netlify.app/*"
+  to = "https://rss-aggregator.aleksey-vl-ivanov.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://rss-aggregator-aleksey-vl-ivanov.netlify.app/*"
+  to = "https://rss-aggregator.aleksey-vl-ivanov.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://rss-aggregator.aleksey-vl-ivanov.com/*"
+  to = "https://rss-aggregator.aleksey-vl-ivanov.com/:splat"
+  status = 301
+  force = true

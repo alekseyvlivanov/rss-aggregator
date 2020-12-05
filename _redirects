@@ -1,6 +1,0 @@
-# Netlify redirects
-
-https://rss-aggregator-chessiah.netlify.app/* https://rss-aggregator.chessiah.com/:splat 301!
-http://rss-aggregator-chessiah.netlify.app/* https://rss-aggregator.chessiah.com/:splat 301!
-
-http://rss-aggregator.chessiah.com/* https://rss-aggregator.chessiah.com/:splat 301!
