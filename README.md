@@ -30,7 +30,7 @@ This is an RSS reader.
 - styling with [Bootstrap](https://getbootstrap.com) (css only)
 - interface localization with [i18next](https://www.i18next.com)
 - [Lodash](https://github.com/lodash/lodash) is used to compare nested objects
-- [on-change](https://github.com/sindresorhus/on-change) wathes for state and initiates renderings
+- [on-change](https://github.com/sindresorhus/on-change) watches for state and initiates renderings
 - validating form data with [Yup](https://github.com/jquense/yup)
 
 ## Install
