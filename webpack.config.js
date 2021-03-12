@@ -1,6 +1,6 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const mode = process.env.NODE_ENV || 'development';
@@ -35,7 +35,9 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new FaviconsWebpackPlugin('./assets/favicon.png'),
+    new CopyWebpackPlugin({
+      patterns: ['./src/favicon.png'],
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),
