@@ -8,7 +8,6 @@ This is an RSS reader.
 
 [![Node CI](https://github.com/alekseyvlivanov/rss-aggregator/workflows/Node%20CI/badge.svg)](https://github.com/alekseyvlivanov/rss-aggregator/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b0ba463df67dfab87af8/maintainability)](https://codeclimate.com/github/alekseyvlivanov/rss-aggregator/maintainability)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/80053436-aca1-4a86-94dd-0b0d4373684b/deploy-status)](https://app.netlify.com/sites/rss-aggregator-aleksey-vl-ivanov/deploys)
 
 <div align="center">
 <img src="rss-aggregator.png" width="400px">
