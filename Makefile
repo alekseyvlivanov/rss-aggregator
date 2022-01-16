@@ -1,16 +1,19 @@
-develop:
-	npx webpack-dev-server
-
 install:
 	npm install
 
-build:
-	NODE_ENV=production npx webpack
+develop:
+	npx vite
 
-test:
-	npm test
+build:
+	npx vite build --emptyOutDir
+
+preview:
+	npx vite preview
 
 lint:
 	npx eslint .
+
+test:
+	npm test
 
 .PHONY: test
