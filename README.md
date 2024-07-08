@@ -37,7 +37,7 @@ This is an RSS reader.
 ```
 $ git clone ...
 $ cd rss-aggregator
-$ make  install
+$ make install
 ```
 
 ## Usage
